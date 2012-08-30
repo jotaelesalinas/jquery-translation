@@ -34,16 +34,19 @@
 	<div class="container">
 		<h1>jQuery translate plugin</h1>
 		
-		XXX plugin signature
+		<p>XXX plugin signature</p>
+		
+		<p>XXX options</p>
 		
 		<!-- ########################################################################### -->
 		
-		<h3>Simplest use case</h3>
+		<h3>Basic use case</h3>
 		
 		<ul>
 			<li>Add a <code>data-trans_id</code> attribute to the HTML elements you want to translate.</li>
 			<li>Create a javascript object with the translated strings.</li>
-			<li>Call translate plugin on the desired elements, passing the object with the translations.</p>
+			<li>Call translate plugin on the desired elements, passing the object with the translations.</li>
+			<li>Chain the result if you feel like.</li>
 		</ul>
 		
 		<div class="bs-docs-example" id="sample-simple">
@@ -53,13 +56,18 @@
 	
 	<script>
 		$(document).ready( function () {
-			$('.trans-simple').translate( {
-				"translations": {
-					"_buy_now": "Buy now",
-					"_fint_out_more": "Find out more",
-					"_accept": "Accept"
-				}
-			} );
+			$('.trans-simple')
+				.translate( {
+					"translations": {
+						"_buy_now": "Buy now",
+						"_fint_out_more": "Find out more",
+						"_accept": "Accept"
+					}
+				} )
+				.css( {
+					"font-style": "italic",
+					"font-variant": "small-caps"
+				} );
 		} );
 	</script>
 		</div>
@@ -70,7 +78,10 @@
 				var html = $('#sample-' + sample_id).html()
 						   .replace(/</g, '&lt;')
 						   .replace(/>/g, '&gt;')
-						   .replace(/"/g, '&quot;');
+						   .replace(/"/g, '&quot;')
+						   .replace(/\r/g, '')
+						   .replace(/\t/g, '    ')
+						   .replace(/\n    /g, "\n\t");
 				$('#pre-sample-' + sample_id).html(html);
 			}
 			show_sample_code('simple');
@@ -115,16 +126,20 @@
 		
 		<p>Just because we developers love parameters!</p>
 		
+		XXX parameter format
+		
 		<div class="bs-docs-example" id="sample-params">
-	<p><button class="trans-params btn btn-primary" data-trans_id="_get_voucher" data-param_amount="$10.00"></button></p>
-	<p class="trans-params" data-trans_id="_remaining_vouchers" data-param_num="7"></p>
+	<p>
+		<span class="trans-params btn btn-primary" data-trans_id="_get_voucher" data-param_amount="$10.00"></span>
+		<span class="trans-params" data-trans_id="_remaining_vouchers" data-param_num="7" data-param_end_date="10/21/2012"></span>
+	</p>
 
 	<script>
 		$(document).ready( function () {
 			$('.trans-params').translate( {
 				"translations": {
 					"_get_voucher": "Get your [_AMOUNT_] voucher now",
-					"_remaining_vouchers": "There's only [_NUM_] left!"
+					"_remaining_vouchers": "There's only [_NUM_] left until [_END_DATE_]!"
 				}
 			} );
 		} );
@@ -146,13 +161,13 @@
 		
 		<div class="bs-docs-example" id="sample-missing-css">
 	<style>
-		.div-sample-missing-css .trans-not-found {
+		.p-sample-missing-css .trans-not-found {
 			background-color:#eee;
 			color:red;
 			font-weight:bold;
 			padding: .25em;
 		}
-		.div-sample-missing-css .trans-missing-param {
+		.p-sample-missing-css .trans-missing-param {
 			background-color:#eee;
 			color:orange;
 			font-weight:bold;
@@ -160,10 +175,10 @@
 		}
 	</style>
 	
-	<div class="div-sample-missing-css">
-		<p><button class="trans-missing-css btn btn-primary" data-trans_id="_get_voucher" data-param_amount="$10.00"></button></p>
-		<p class="trans-missing-css" data-trans_id="_remaining_vouchers" data-param_end_date="10/21/2012"></p>
-	</div>
+	<p class="p-sample-missing-css">
+		<span class="trans-missing-css" data-trans_id="_get_voucher" data-param_amount="$10.00"></span>
+		<span class="trans-missing-css" data-trans_id="_remaining_vouchers" data-param_num="7"></span>
+	</p>
 
 	<script>
 		$(document).ready( function () {
@@ -184,48 +199,83 @@
 		
 		<!-- ########################################################################### -->
 		
-		<h3>Missing translations: callbacks</h3>
+		<h3>Missing translations: events</h3>
 		
-		<p><code>trans-not-found</code> and <code>trans-missing-param</code> classes are added by default when
-		   a string is not found in the translation table o when a parameter is not found in the <code>data-param_*</code>
-		   attributes, respectively.</p>
+		<p>This plugin fires three namespaced events:</p>
 		
-		<div class="bs-docs-example" id="sample-missing-css">
+		<ul>
+			<li><code>finished.translate</code> fires when the processing is done. It fires in just one of the selected elements, can't specify which one.
+			    <br />
+				Extra arguments of handler function:
+				<ul style="margin-bottom: .75em;">
+					<li><code>selector</code>: selector used to call the plugin
+				</ul>
+			<li><code>fail_strid.translate</code> fires every time a translation string is not found.
+			    <br />
+				Extra arguments of handler function:
+				<ul style="margin-bottom: .75em;">
+					<li><code>element</code>: the element that caused the event to trigger
+					<li><code>lang</code>: the language used
+					<li><code>strid</code>: the string identificator
+				</ul>
+			<li><code>fail_param.translate</code> fires every time a paramenter is not found in the <code>data-param_*</code> attributes.
+			    <br />
+				Extra arguments of handler function are the same than <code>fail_strid.translate</code> plus:
+				<ul style="margin-bottom: .75em;">
+					<li><code>param</code>: the parameter that was not found (full string as present in the translated string)
+				</ul>
+		</ul>
+		
+		<p>Open your console and see the output of this examle.</p>
+		
+		<div class="bs-docs-example" id="sample-missing-events">
 	<style>
-		.div-sample-missing-css .trans-not-found {
-			background-color:#eee;
-			color:red;
+		.p-sample-missing-events .trans-not-found {
+			background-color: orange;
+			color:white;
 			font-weight:bold;
-			padding: .25em;
+			padding: .5em;
 		}
-		.div-sample-missing-css .trans-missing-param {
-			background-color:#eee;
-			color:orange;
+		.p-sample-missing-events .trans-missing-param {
+			background-color: skyblue;
+			color:white;
 			font-weight:bold;
-			padding: .25em;
+			padding: .5em;
 		}
 	</style>
 	
-	<div class="div-sample-missing-css">
-		<p><button class="trans-missing-css btn btn-primary" data-trans_id="_get_voucher" data-param_amount="$10.00"></button></p>
-		<p class="trans-missing-css" data-trans_id="_remaining_vouchers" data-param_end_date="10/21/2012"></p>
-	</div>
+	<p class="p-sample-missing-events">
+		<span class="trans-missing-events" data-trans_id="_get_voucher" data-param_amount="$10.00"></span>
+		<span class="trans-missing-events" data-trans_id="_remaining_vouchers" data-param_end_date="10/21/2012"></span>
+	</p>
 
 	<script>
 		$(document).ready( function () {
-			$('.trans-missing-css').translate( {
-				"translations": {
-					"_get_voucer": "Get your [_AMOUNT_] voucher now", // note the typo in "voucher"!
-					"_remaining_vouchers": "There's only [_NUM_] left until [_END_DATE_]!"
-				}
-			} );
+			$('.trans-missing-events')
+				.bind('fail_param.translate', function (e, element, lang, strid, param) {
+					$(this).addClass('trans-missing-param');
+					console.log( [ 'fail_param.translate', e, element, lang, strid, param ] );
+				} )
+				.bind('fail_strid.translate', function (e, element, lang, strid) {
+					$(this).addClass('trans-not-found');
+					console.log( [ 'fail_strid.translate', e, element, lang, strid ] );
+				} )
+				.bind('finished.translate', function (e, selector) {
+					console.log( ['finished.translate', e, selector] );
+				} )
+				.translate( {
+					"translations": {
+						"_get_voucer": "Get your [_AMOUNT_] voucher now", // note the typo in "voucher"!
+						"_remaining_vouchers": "There's only [_NUM_] left until [_END_DATE_]!"
+					}
+				} );
 		} );
 	</script>
 		</div>
 
-		<pre class="sample prettyprint linenums" style="margin-bottom: 9px;" id="pre-sample-missing-css"></pre>
+		<pre class="sample prettyprint linenums" style="margin-bottom: 9px;" id="pre-sample-missing-events"></pre>
 		<script>
-			show_sample_code('missing-css');
+			show_sample_code('missing-events');
 		</script>
 
 		<!-- ########################################################################### -->
