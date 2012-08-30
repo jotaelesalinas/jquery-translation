@@ -45,15 +45,6 @@
 			return this.replace(/^\s+|\s+$/, '');
 		};
 
-		// dummy console
-		if (typeof window.console === 'undefined') {
-			window.console = {
-				"log": function (text) {
-					// do nothing
-				}
-			};
-		}
-		
 		// plugin initialization
 		
 		var settings = $.extend({}, $.fn.translate.defaults, options);
@@ -76,7 +67,8 @@
 				}
 			}
 			
-			// XXX check data-strid
+			// if data-strid is empty, do nothing
+			// XXX or should we create a new event for this?
 			var strid = $(this).data(DATA_STR_ID).trim();
 			if ( strid === '' ) {
 				return;
@@ -86,9 +78,9 @@
 			
 			if (text === false) {
 				text = strid;
-				// XXX check setting for this
-				// console.log("Warning: missing translation string '" + strid + "' (language: " + settings.lang + ")");
-				// $(this).addClass(CLASS_NO_TRANS);
+				if (settings.add_fail_classes) {
+					$(this).addClass(CLASS_NO_TRANS);
+				}
 				$(this).trigger('fail_strid.translate', [$($(this)[0]), settings.lang, strid]);
 			} else {
 				var re = /\[_(\w+)_\]/g;
@@ -107,9 +99,9 @@
 					var value = $(this).data(key);
 					if ( (typeof value === 'undefined') || (value === null) ) {
 						value = full_p;
-						// XXX check setting for this
-						// console.log("Warning: missing parameter '" + full_p + "' in translation string '" + strid + "' (language: " + settings.lang + ")");
-						// $(this).addClass(CLASS_NO_PARAM);
+						if (settings.add_fail_classes) {
+							$(this).addClass(CLASS_NO_PARAM);
+						}
 						$(this).trigger('fail_param.translate', [$($(this)[0]), settings.lang, strid, full_p]);
 					}
 					
@@ -126,10 +118,9 @@
 	};
 	
 	$.fn.translate.defaults = {
-		"lang"                     : '-',
-		"translations"             : {},
-		"callback_trans_not_found" : null,
-		"callback_missing_param"   : null
+		"lang"             : '-',
+		"translations"     : {},
+		"add_fail_classes" : false
 	};
 	
 })(jQuery);

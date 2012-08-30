@@ -153,25 +153,25 @@
 		
 		<!-- ########################################################################### -->
 		
-		<h3>Missing translations: default CSS classes</h3>
+		<h3>Missing translations: CSS classes</h3>
 		
-		<p><code>trans-not-found</code> and <code>trans-missing-param</code> classes are added by default when
+		<p>When setting <code>add_fail_classes</code> option to true, <code>trans-not-found</code> and <code>trans-missing-param</code> classes are added when
 		   a string is not found in the translation table o when a parameter is not found in the <code>data-param_*</code>
 		   attributes, respectively.</p>
 		
 		<div class="bs-docs-example" id="sample-missing-css">
 	<style>
 		.p-sample-missing-css .trans-not-found {
-			background-color:#eee;
-			color:red;
-			font-weight:bold;
-			padding: .25em;
+			background-color: violet;
+			color:            white;
+			font-weight:      bold;
+			padding:         .5em;
 		}
 		.p-sample-missing-css .trans-missing-param {
-			background-color:#eee;
-			color:orange;
-			font-weight:bold;
-			padding: .25em;
+			background-color: crimson;
+			color:            white;
+			font-weight:      bold;
+			padding:          .5em;
 		}
 	</style>
 	
@@ -186,7 +186,8 @@
 				"translations": {
 					"_get_voucer": "Get your [_AMOUNT_] voucher now", // note the typo in "voucher"!
 					"_remaining_vouchers": "There's only [_NUM_] left until [_END_DATE_]!"
-				}
+				},
+				"add_fail_classes": true
 			} );
 		} );
 	</script>
@@ -231,16 +232,16 @@
 		<div class="bs-docs-example" id="sample-missing-events">
 	<style>
 		.p-sample-missing-events .trans-not-found {
-			background-color: orange;
-			color:white;
-			font-weight:bold;
-			padding: .5em;
+			background-color: tomato;
+			color:            white;
+			font-weight:      bold;
+			padding:          .5em;
 		}
 		.p-sample-missing-events .trans-missing-param {
 			background-color: skyblue;
-			color:white;
-			font-weight:bold;
-			padding: .5em;
+			color:            white;
+			font-weight:      bold;
+			padding:          .5em;
 		}
 	</style>
 	
