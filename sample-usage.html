@@ -1,0 +1,237 @@
+﻿<!doctype html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+	<title>jQuery translate plugin</title>
+	
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	
+	<meta name="viewport" content="width=device-width">
+	
+	<script src="http://www.wolford.com/testing/shop2/js/libs/modernizr-2.5.3.min.js"></script>
+	
+	<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+	
+	<script src="http://code.jquery.com/jquery-1.8.0.min.js"></script>
+	<link rel="stylesheet" href="http://www.wolford.com/testing/shop2/bootstrap/css/bootstrap.min.css"/>
+	<link rel="stylesheet" href="http://www.wolford.com/testing/shop2/bootstrap/css/bootstrap-responsive.min.css"/>
+	<script type="text/javascript" src="http://www.wolford.com/testing/shop2/bootstrap/js/bootstrap.min.js"></script>
+	
+    <link href="http://twitter.github.com/bootstrap/assets/css/docs.css" rel="stylesheet">
+    <link href="http://twitter.github.com/bootstrap/assets/js/google-code-prettify/prettify.css" rel="stylesheet">
+	
+	<script src="jquery.translate.js"></script>
+
+</head>
+
+<body>
+	<div class="container">
+		<h1>jQuery translate plugin</h1>
+		
+		XXX plugin signature
+		
+		<!-- ########################################################################### -->
+		
+		<h3>Simplest use case</h3>
+		
+		<ul>
+			<li>Add a <code>data-trans_id</code> attribute to the HTML elements you want to translate.</li>
+			<li>Create a javascript object with the translated strings.</li>
+			<li>Call translate plugin on the desired elements, passing the object with the translations.</p>
+		</ul>
+		
+		<div class="bs-docs-example" id="sample-simple">
+	<button class="trans-simple btn btn-primary" data-trans_id="_buy_now"></button>
+	<button class="trans-simple btn" data-trans_id="_fint_out_more"></button>
+	<button class="trans-simple btn" data-trans_id="_accept"></button>
+	
+	<script>
+		$(document).ready( function () {
+			$('.trans-simple').translate( {
+				"translations": {
+					"_buy_now": "Buy now",
+					"_fint_out_more": "Find out more",
+					"_accept": "Accept"
+				}
+			} );
+		} );
+	</script>
+		</div>
+
+		<pre class="sample prettyprint linenums" style="margin-bottom: 9px;" id="pre-sample-simple"></pre>
+		<script>
+			function show_sample_code (sample_id) {
+				var html = $('#sample-' + sample_id).html()
+						   .replace(/</g, '&lt;')
+						   .replace(/>/g, '&gt;')
+						   .replace(/"/g, '&quot;');
+				$('#pre-sample-' + sample_id).html(html);
+			}
+			show_sample_code('simple');
+		</script>
+		
+		<!-- ########################################################################### -->
+		
+		<h3>Several languages</h3>
+		
+		<p>Just in case you need it</p>
+		
+		<div class="bs-docs-example" id="sample-several">
+	<p><button class="trans-several-en btn btn-primary" data-trans_id="_buy_now"></button></p>
+	<p><button class="trans-several-it btn" data-trans_id="_fint_out_more"></button></p>
+
+	<script>
+		$(document).ready( function () {
+			$('.trans-several-en').translate( {
+				"translations": {
+					"_buy_now": "Buy now",
+					"_fint_out_more": "Find out more"
+				}
+			} );
+			$('.trans-several-it').translate( {
+				"translations": {
+					"_buy_now": "Acquista",
+					"_fint_out_more": "Scopri"
+				}
+			} );
+		} );
+	</script>
+		</div>
+
+		<pre class="sample prettyprint linenums" style="margin-bottom: 9px;" id="pre-sample-several"></pre>
+		<script>
+			show_sample_code('several');
+		</script>
+		
+		<!-- ########################################################################### -->
+		
+		<h3>Parameters</h3>
+		
+		<p>Just because we developers love parameters!</p>
+		
+		<div class="bs-docs-example" id="sample-params">
+	<p><button class="trans-params btn btn-primary" data-trans_id="_get_voucher" data-param_amount="$10.00"></button></p>
+	<p class="trans-params" data-trans_id="_remaining_vouchers" data-param_num="7"></p>
+
+	<script>
+		$(document).ready( function () {
+			$('.trans-params').translate( {
+				"translations": {
+					"_get_voucher": "Get your [_AMOUNT_] voucher now",
+					"_remaining_vouchers": "There's only [_NUM_] left!"
+				}
+			} );
+		} );
+	</script>
+		</div>
+
+		<pre class="sample prettyprint linenums" style="margin-bottom: 9px;" id="pre-sample-params"></pre>
+		<script>
+			show_sample_code('params');
+		</script>
+		
+		<!-- ########################################################################### -->
+		
+		<h3>Missing translations: default CSS classes</h3>
+		
+		<p><code>trans-not-found</code> and <code>trans-missing-param</code> classes are added by default when
+		   a string is not found in the translation table o when a parameter is not found in the <code>data-param_*</code>
+		   attributes, respectively.</p>
+		
+		<div class="bs-docs-example" id="sample-missing-css">
+	<style>
+		.div-sample-missing-css .trans-not-found {
+			background-color:#eee;
+			color:red;
+			font-weight:bold;
+			padding: .25em;
+		}
+		.div-sample-missing-css .trans-missing-param {
+			background-color:#eee;
+			color:orange;
+			font-weight:bold;
+			padding: .25em;
+		}
+	</style>
+	
+	<div class="div-sample-missing-css">
+		<p><button class="trans-missing-css btn btn-primary" data-trans_id="_get_voucher" data-param_amount="$10.00"></button></p>
+		<p class="trans-missing-css" data-trans_id="_remaining_vouchers" data-param_end_date="10/21/2012"></p>
+	</div>
+
+	<script>
+		$(document).ready( function () {
+			$('.trans-missing-css').translate( {
+				"translations": {
+					"_get_voucer": "Get your [_AMOUNT_] voucher now", // note the typo in "voucher"!
+					"_remaining_vouchers": "There's only [_NUM_] left until [_END_DATE_]!"
+				}
+			} );
+		} );
+	</script>
+		</div>
+
+		<pre class="sample prettyprint linenums" style="margin-bottom: 9px;" id="pre-sample-missing-css"></pre>
+		<script>
+			show_sample_code('missing-css');
+		</script>
+		
+		<!-- ########################################################################### -->
+		
+		<h3>Missing translations: callbacks</h3>
+		
+		<p><code>trans-not-found</code> and <code>trans-missing-param</code> classes are added by default when
+		   a string is not found in the translation table o when a parameter is not found in the <code>data-param_*</code>
+		   attributes, respectively.</p>
+		
+		<div class="bs-docs-example" id="sample-missing-css">
+	<style>
+		.div-sample-missing-css .trans-not-found {
+			background-color:#eee;
+			color:red;
+			font-weight:bold;
+			padding: .25em;
+		}
+		.div-sample-missing-css .trans-missing-param {
+			background-color:#eee;
+			color:orange;
+			font-weight:bold;
+			padding: .25em;
+		}
+	</style>
+	
+	<div class="div-sample-missing-css">
+		<p><button class="trans-missing-css btn btn-primary" data-trans_id="_get_voucher" data-param_amount="$10.00"></button></p>
+		<p class="trans-missing-css" data-trans_id="_remaining_vouchers" data-param_end_date="10/21/2012"></p>
+	</div>
+
+	<script>
+		$(document).ready( function () {
+			$('.trans-missing-css').translate( {
+				"translations": {
+					"_get_voucer": "Get your [_AMOUNT_] voucher now", // note the typo in "voucher"!
+					"_remaining_vouchers": "There's only [_NUM_] left until [_END_DATE_]!"
+				}
+			} );
+		} );
+	</script>
+		</div>
+
+		<pre class="sample prettyprint linenums" style="margin-bottom: 9px;" id="pre-sample-missing-css"></pre>
+		<script>
+			show_sample_code('missing-css');
+		</script>
+
+		<!-- ########################################################################### -->
+		
+	<script src="http://twitter.github.com/bootstrap/assets/js/google-code-prettify/prettify.js"></script>
+
+</body>
+	
+</html>
