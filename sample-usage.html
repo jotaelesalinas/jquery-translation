@@ -31,86 +31,247 @@
 </head>
 
 <body>
+	<script>
+		function show_sample_code (sample_id) {
+			var html = $('#sample-' + sample_id).html()
+			           .replace(/^\s+|\s+$/g, '')
+			           .replace(/</g, '&lt;')
+					   .replace(/>/g, '&gt;')
+					   .replace(/"/g, '&quot;')
+					   .replace(/\r/g, '')
+					   .replace(/\t/g, '    ')
+					   .replace(/\n    /g, "\n");
+			$('#pre-sample-' + sample_id).html(html);
+		}
+	</script>
+	
 	<div class="container">
 		<h1>jQuery translate plugin</h1>
 		
-		<p>XXX plugin signature</p>
+		<p>jQuery translate is a plugin for jQuery that changes strings in an HTML page with their corresponding translations.</p>
 		
-		<p>XXX options</p>
+		<h5>Features</h5>
+		
+		<ul>
+			<li>Easy HTML markup with data-* attributes
+			<li>Simple and parameterized strings
+			<li>Super-easy javascript API with events
+			<li>Automatic hightlighting of missing translations with CSS classes
+		</ul>
+		
+		<h5>Setup</h5>
+		
+		<p>Just add this two lines to your HTML:</p>
+		
+		<pre class="sample prettyprint linenums" style="margin-bottom: 9px;">
+&lt;!-- jQuery library, most probably already included in your project --&gt;
+&lt;script src="http://code.jquery.com/jquery-1.8.0.min.js"&gt;&lt;/script&gt;
+&lt;!-- jQuery translate library --&gt;
+&lt;script src="jquery.translate.js"&gt;&lt;/script&gt;</pre>
+		
+		<p>Add your HTML as usual and wrap the text you want to translate with <code>&lt;span&gt;</code>, <code>&lt;p&gt;</code>
+		   or any other HTML element that fits your needs.</p>
+		
+		<p>Add <code>data-trans_id</code> attribute with the identifier of the string you want to translate and, optionally,
+		   <code>data-param_*</code> attributes to assign values to the parameters. See <a href="#params">parameters example</a>
+		   for an example on how to use the parameters.</p>
+		
+		<pre class="sample prettyprint linenums" style="margin-bottom: 9px;">
+&lt;nav&gt;
+    &lt;ul class=&quot;btn-group&quot;&gt;
+        &lt;li class=&quot;btn&quot;&gt;&lt;a class=&quot;trans&quot; data-trans_id=&quot;_homepage&quot;&gt;Home&lt;/a&gt;&lt;/li&gt;
+        &lt;li class=&quot;btn&quot;&gt;&lt;a class=&quot;trans&quot; data-trans_id=&quot;_contact&quot;&gt;Contact&lt;/a&gt;&lt;/li&gt;
+        &lt;li class=&quot;btn&quot;&gt;&lt;a class=&quot;trans&quot; data-trans_id=&quot;_sitemap&quot;&gt;Sitemap&lt;/a&gt;&lt;/li&gt;
+        &lt;li class=&quot;btn&quot;&gt;&lt;a class=&quot;trans&quot; data-trans_id=&quot;_jobs&quot;&gt;Jobs&lt;/a&gt; &lt;span class=&quot;badge badge-info&quot;&gt;4&lt;/span&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/nav&gt;</pre>
+		
+		<p>And run this code at the end of your HTML file (in this case, we translate to fake Spanish):</p>
+		
+		<pre class="sample prettyprint linenums" style="margin-bottom: 9px;">
+&lt;script&gt;
+    var trans_table = {
+        "_homepage": "Homepago",
+        "_contact":  "Contacto",
+        "_sitemap":  "Zitemapo",
+        "_jobs":     "Jobos"
+    };
+    // $(selector).translate(options);
+    $('.trans').translate( { "translation_table": trans_table });
+&lt;/script&gt;</pre>
+
+		<p>Our code in action:</p>
+		
+		<div class="bs-docs-example">
+<nav>
+    <ul class="btn-group">
+        <li class="btn"><a class="trans" data-trans_id="_homepage">Home</a></li>
+        <li class="btn"><a class="trans" data-trans_id="_contact">Contact</a></li>
+        <li class="btn"><a class="trans" data-trans_id="_sitemap">Sitemap</a></li>
+        <li class="btn"><a class="trans" data-trans_id="_jobs">Jobs</a> <span class="badge badge-info">4</span></li>
+    </ul>
+</nav>
+<script>
+    var trans_table = {
+        "_homepage": "Homepago",
+        "_contact":  "Contacto",
+        "_sitemap":  "Zitemapo",
+        "_jobs":     "Jobos"
+    };
+    $('.trans').translate( { "translation_table": trans_table });
+</script>
+		</div>
+		
+		
+		<h5>Options</h5>
+		
+		<ul>
+			<li><code>translation_table</code> (mandatory): object containing the translation strings in pairs strid => translated text.</li>
+			<li><code>add_fail_classes</code>: if true, adds classes <code>trans-not-found</code> or  <code>trans-missing-param</code>
+			    when translations or parameters are not found.</li>
+		</ul>
+		
+		<h5>Events</h5>
+		
+		<p>XXX explain the 3 events</p>
+		
+		<p>See <a href="#events">events example</a> for an example on how to handle events.</p>
+		
+		<h5>TO-DO</h5>
+		
+		<ul>
+			<li>parameter transliteration: search the parameter value again in the translation table.</li>
+			<li>allow html inside the translated element: replace/ the translated text until the next "<" character. should be an option? opt-in or opt-out?</li>
+		</ul>
 		
 		<!-- ########################################################################### -->
 		
-		<h3>Basic use case</h3>
+		<h3>Examples</h3>
 		
 		<ul>
-			<li>Add a <code>data-trans_id</code> attribute to the HTML elements you want to translate.</li>
-			<li>Create a javascript object with the translated strings.</li>
-			<li>Call translate plugin on the desired elements, passing the object with the translations.</li>
-			<li>Chain the result if you feel like.</li>
+			<li><a href="#basic">Basic use with chaining</a></li>
+			<li><a href="#several">Several languages</a></li>
+			<li><a href="#params">Parameters</a></li>
+			<li><a href="#translit">TODO: Parameter transliteration</a></li>
+			<li><a href="#missing-css">Missing translations: CSS classes</a></li>
+			<li><a href="#events">Missing translations: events</a></li>
+			<li><a href="#extra">Extra ball: localstorage and dynamic loading</a></li>
 		</ul>
 		
-		<div class="bs-docs-example" id="sample-simple">
-	<button class="trans-simple btn btn-primary" data-trans_id="_buy_now"></button>
-	<button class="trans-simple btn" data-trans_id="_fint_out_more"></button>
-	<button class="trans-simple btn" data-trans_id="_accept"></button>
+		<a name="basic"></a>
+		<h5>Basic use with chaining</h5>
+		
+		<p>These guys at Twitter don't know a thing about styling.
+		   Let's <em>improve</em> Bootstrap's default styles a little bit.</p>
+		
+		<div class="bs-docs-example" id="sample-basic">
+	<button class="trans-basic btn btn-primary" data-trans_id="_buy_now"></button>
+	<button class="trans-basic btn" data-trans_id="_fint_out_more"></button>
+	<button class="trans-basic btn" data-trans_id="_accept"></button>
 	
 	<script>
+		var trans_table = {
+			"_buy_now": "Buy now",
+			"_fint_out_more": "Find out more",
+			"_accept": "Accept"
+		};
+		
 		$(document).ready( function () {
-			$('.trans-simple')
+			$('.trans-basic')
 				.translate( {
-					"translations": {
-						"_buy_now": "Buy now",
-						"_fint_out_more": "Find out more",
-						"_accept": "Accept"
-					}
+					"translation_table": trans_table
 				} )
 				.css( {
+					"color": "red",
+					"font-size": "150%",
+					"font-family": "fantasy",
 					"font-style": "italic",
-					"font-variant": "small-caps"
+					"font-variant": "small-caps",
+					"border-bottom": "4px solid black"
 				} );
 		} );
 	</script>
 		</div>
 
-		<pre class="sample prettyprint linenums" style="margin-bottom: 9px;" id="pre-sample-simple"></pre>
+		<pre class="sample prettyprint linenums" style="margin-bottom: 9px;" id="pre-sample-basic"></pre>
 		<script>
-			function show_sample_code (sample_id) {
-				var html = $('#sample-' + sample_id).html()
-						   .replace(/</g, '&lt;')
-						   .replace(/>/g, '&gt;')
-						   .replace(/"/g, '&quot;')
-						   .replace(/\r/g, '')
-						   .replace(/\t/g, '    ')
-						   .replace(/\n    /g, "\n\t");
-				$('#pre-sample-' + sample_id).html(html);
-			}
-			show_sample_code('simple');
+			show_sample_code('basic');
 		</script>
 		
+		<p>That's it. Place those buttons on your e-commerce website and count the money coming to your pockets.</p>
 		<!-- ########################################################################### -->
 		
-		<h3>Several languages</h3>
+		<a name="several"></a>
+		<h5>Several languages</h5>
 		
-		<p>Just in case you need it</p>
+		<p>Multi-language sites can't be easier.</p>
 		
 		<div class="bs-docs-example" id="sample-several">
-	<p><button class="trans-several-en btn btn-primary" data-trans_id="_buy_now"></button></p>
-	<p><button class="trans-several-it btn" data-trans_id="_fint_out_more"></button></p>
+	<span class="btn-group">
+		<button id="dropdown-button" class="btn"><span class="trans-several" data-trans_id="_language">English</span></button>
+		<button class="btn dropdown-toggle" data-toggle="dropdown">
+			<span class="caret"></span>
+		</button>
+		<ul class="dropdown-menu lang-selector">
+			<!-- dropdown menu links -->
+			<li><a data-lang="en">English</a></li>
+			<li><a data-lang="de">Deutsch</a></li>
+			<li><a data-lang="it">Italiano</a></li>
+			<li><a data-lang="es">Español</a></li>
+			<li><a data-lang="fr">Français</a></li>
+	  </ul>
+	</span>
+	
+	<br /><br />
+	
+	<button class="trans-several btn btn-primary" data-trans_id="_buy_now">Buy now</button>
+	<button class="trans-several btn" data-trans_id="_find_out_more">Find out more</button>
 
 	<script>
 		$(document).ready( function () {
-			$('.trans-several-en').translate( {
-				"translations": {
+			var trans_table_several = {
+				"en": {
 					"_buy_now": "Buy now",
-					"_fint_out_more": "Find out more"
-				}
-			} );
-			$('.trans-several-it').translate( {
-				"translations": {
+					"_find_out_more": "Find out more",
+					"_language": "English"
+				},
+				"de": {
+					"_buy_now": "Jetzt kaufen",
+					"_find_out_more": "Erfahren Sie mehr",
+					"_language": "Deutsch"
+				},
+				"it": {
 					"_buy_now": "Acquista",
-					"_fint_out_more": "Scopri"
+					"_find_out_more": "Scopri",
+					"_language": "Italiano"
+				},
+				"es": {
+					"_buy_now": "Comprar ahora",
+					"_find_out_more": "Más información",
+					"_language": "Español"
+				},
+				"fr": {
+					"_buy_now": "Achetez",
+					"_find_out_more": "En savoir plus",
+					"_language":  "Français"
 				}
+			};
+			
+			// when one of the drop-down links is clicked...
+			$('.lang-selector a').click( function () {
+				// ...read the language code...
+				var lang_code = $(this).data('lang');
+				// ...and apply the translation
+				$('.trans-several').translate( {
+					"translation_table": trans_table_several[lang_code]
+				} );
 			} );
+			
+			// for this demo, we pre-select a language other than english,
+			// by making num range from 1 to (length - 1) using this formula:
+			// Math.floor(Math.random() * max) + min
+			var num = Math.floor(Math.random() * ($('.lang-selector a').length - 1)) + 1;
+			$($('.lang-selector a')[num]).click();
 		} );
 	</script>
 		</div>
@@ -122,11 +283,21 @@
 		
 		<!-- ########################################################################### -->
 		
-		<h3>Parameters</h3>
+		<a name="translit"></a>
+		<h5>TODO: Parameter transliteration</h5>
+		
+		<p><code>data-transliterate_*</code> where <code>*</code> has to match an existing <code>data-param_*</code> attribute.</p>
+		
+		<p>Would be great if: No need for a value; mere attribute presence is enough.</p>
+		
+		<!-- ########################################################################### -->
+		
+		<a name="params"></a>
+		<h5>Parameters</h5>
 		
 		<p>Just because we developers love parameters!</p>
 		
-		XXX parameter format
+		<p>XXX explain parameter format in html and in translated text</p>
 		
 		<div class="bs-docs-example" id="sample-params">
 	<p>
@@ -137,7 +308,7 @@
 	<script>
 		$(document).ready( function () {
 			$('.trans-params').translate( {
-				"translations": {
+				"translation_table": {
 					"_get_voucher": "Get your [_AMOUNT_] voucher now",
 					"_remaining_vouchers": "There's only [_NUM_] left until [_END_DATE_]!"
 				}
@@ -153,7 +324,8 @@
 		
 		<!-- ########################################################################### -->
 		
-		<h3>Missing translations: CSS classes</h3>
+		<a name="missing-css"></a>
+		<h5>Missing translations: CSS classes</h5>
 		
 		<p>When setting <code>add_fail_classes</code> option to true, <code>trans-not-found</code> and <code>trans-missing-param</code> classes are added when
 		   a string is not found in the translation table o when a parameter is not found in the <code>data-param_*</code>
@@ -183,7 +355,7 @@
 	<script>
 		$(document).ready( function () {
 			$('.trans-missing-css').translate( {
-				"translations": {
+				"translation_table": {
 					"_get_voucer": "Get your [_AMOUNT_] voucher now", // note the typo in "voucher"!
 					"_remaining_vouchers": "There's only [_NUM_] left until [_END_DATE_]!"
 				},
@@ -200,7 +372,8 @@
 		
 		<!-- ########################################################################### -->
 		
-		<h3>Missing translations: events</h3>
+		<a name="events"></a>
+		<h5>Missing translations: events</h5>
 		
 		<p>This plugin fires three namespaced events:</p>
 		
@@ -265,7 +438,7 @@
 					console.log( ['finished.translate', e, selector] );
 				} )
 				.translate( {
-					"translations": {
+					"translation_table": {
 						"_get_voucer": "Get your [_AMOUNT_] voucher now", // note the typo in "voucher"!
 						"_remaining_vouchers": "There's only [_NUM_] left until [_END_DATE_]!"
 					}
@@ -283,6 +456,9 @@
 		
 	<script src="http://twitter.github.com/bootstrap/assets/js/google-code-prettify/prettify.js"></script>
 
+	<script>
+		prettyPrint();
+	</script>
 </body>
 	
 </html>

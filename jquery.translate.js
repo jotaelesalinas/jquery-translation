@@ -19,26 +19,7 @@
 			  CLASS_NO_TRANS    = 'trans-not-found',
 			  CLASS_NO_PARAM    = 'trans-missing-param';
 		
-		// storage
-		
-		var set_trans = function (key, value) {
-			if (typeof key === 'string') {
-				trans_table[settings.lang][key] = value;
-			} else {
-				for (var i in key) {
-					set_trans(i, key[i]);
-				}
-			}
-		};
-		
-		var get_trans = function (key) {
-			if ( (typeof key === 'undefined') || (key === null) ) {
-				return trans_table[settings.lang];
-			}
-			return trans_table[settings.lang][key];
-		};
-		
-		// a pair of polyfills
+		// some nice of polyfills
 		
 		// trim
 		String.prototype.trim = function () {
@@ -49,21 +30,15 @@
 		
 		var settings = $.extend({}, $.fn.translate.defaults, options);
 		
-		var trans_table = {};
-		if ( (typeof trans_table[settings.lang] === 'undefined') || (trans_table[settings.lang] === null) ) {
-			trans_table[settings.lang] = {};
-		}
-		set_trans(settings.translations);
-		
 		var plugin = this;
 		
 		plugin.each( function () {
 			var strid = $(this).data(DATA_STR_ID).trim();
 			if ( strid !== '' ) {
-				if ( (typeof get_trans(strid) === 'undefined') ||
-					 (get_trans(strid) === null) ||
-					 (get_trans(strid) == strid) ) {
-					set_trans(strid, false);
+				if ( (typeof settings.translation_table[strid] === 'undefined') ||
+					 (settings.translation_table[strid] === null) ||
+					 (settings.translation_table[strid] == strid) ) {
+					settings.translation_table[strid] = false;
 				}
 			}
 			
@@ -74,14 +49,14 @@
 				return;
 			}
 			
-			var text = get_trans(strid);
+			var text = settings.translation_table[strid];
 			
 			if (text === false) {
 				text = strid;
 				if (settings.add_fail_classes) {
 					$(this).addClass(CLASS_NO_TRANS);
 				}
-				$(this).trigger('fail_strid.translate', [$($(this)[0]), settings.lang, strid]);
+				$(this).trigger('fail_strid.translate', [$($(this)[0]), strid]);
 			} else {
 				var re = /\[_(\w+)_\]/g;
 				var params = [],
@@ -102,7 +77,7 @@
 						if (settings.add_fail_classes) {
 							$(this).addClass(CLASS_NO_PARAM);
 						}
-						$(this).trigger('fail_param.translate', [$($(this)[0]), settings.lang, strid, full_p]);
+						$(this).trigger('fail_param.translate', [$($(this)[0]), strid, full_p]);
 					}
 					
 					text = text.replace(full_p, value);
@@ -118,9 +93,8 @@
 	};
 	
 	$.fn.translate.defaults = {
-		"lang"             : '-',
-		"translations"     : {},
-		"add_fail_classes" : false
+		"translation_table" : {},
+		"add_fail_classes"  : false
 	};
 	
 })(jQuery);
