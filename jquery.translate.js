@@ -1,14 +1,14 @@
 /*
  * jQuery.translate
- * Automatic translation plugin for jQuery
+ * Translation plugin for jQuery
  * 
  * options:
- *  - lang: destination language
- *  - url: json provider for missing translations
- *  - trans: 
- * Copyright 2011 Jose L. Salinas
+ *   "translation_table" : {},
+ *   "add_fail_classes"  : false
+ * 
+ * Copyright 2012 Jose L. Salinas
  * Released under the MIT License
-*/
+ */
 
 (function($){
 	

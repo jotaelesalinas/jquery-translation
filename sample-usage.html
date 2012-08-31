@@ -50,7 +50,17 @@
 		
 		<p>jQuery translate is a plugin for jQuery that changes strings in an HTML page with their corresponding translations.</p>
 		
-		<h5>Features</h5>
+		<ul>
+			<li><a href="#features">Features</a></li>
+			<li><a href="#setup">Setup</a></li>
+			<li><a href="#usage">Usage</a></li>
+			<li><a href="#options">Options</a></li>
+			<li><a href="#events">Event</a></li>
+			<li><a href="#todo">To-do list</a></li>
+		</ul>
+		
+		<a name="features"></a>
+		<h3>Features</h3>
 		
 		<ul>
 			<li>Easy HTML markup with data-* attributes
@@ -59,7 +69,9 @@
 			<li>Automatic hightlighting of missing translations with CSS classes
 		</ul>
 		
-		<h5>Setup</h5>
+		<a name="setup"></a>
+		<a name="usage"></a>
+		<h3>Setup</h3>
 		
 		<p>Just add this two lines to your HTML:</p>
 		
@@ -122,8 +134,8 @@
 </script>
 		</div>
 		
-		
-		<h5>Options</h5>
+		<a name="options"></a>
+		<h3>Options</h3>
 		
 		<ul>
 			<li><code>translation_table</code> (mandatory): object containing the translation strings in pairs strid => translated text.</li>
@@ -131,35 +143,40 @@
 			    when translations or parameters are not found.</li>
 		</ul>
 		
-		<h5>Events</h5>
+		<a name="events"></a>
+		<h3>Events</h3>
 		
 		<p>XXX explain the 3 events</p>
 		
 		<p>See <a href="#events">events example</a> for an example on how to handle events.</p>
 		
-		<h5>TO-DO</h5>
+		<a name="todo"></a>
+		<h3>To-do list</h3>
 		
 		<ul>
-			<li>parameter transliteration: search the parameter value again in the translation table.</li>
-			<li>allow html inside the translated element: replace/ the translated text until the next "<" character. should be an option? opt-in or opt-out?</li>
+			<li>parameter <strong>transliteration</strong>: search the parameter value again in the translation table.</li>
+			<li><strong>html inside the elements</strong> being translated: replace/add the translated text only until the next "<" character.<br />
+			    in the "jobs" example above, the optimal solution would be to place the badge _inside_ the link, so that it is also clickable.<br />
+				should this be an option? opt-in or opt-out?</li>
 		</ul>
 		
 		<!-- ########################################################################### -->
 		
-		<h3>Examples</h3>
+		<h2>Examples</h2>
 		
 		<ul>
 			<li><a href="#basic">Basic use with chaining</a></li>
 			<li><a href="#several">Several languages</a></li>
 			<li><a href="#params">Parameters</a></li>
+			<li><a href="#html">Including HTML in parameters</a></li>
 			<li><a href="#translit">TODO: Parameter transliteration</a></li>
 			<li><a href="#missing-css">Missing translations: CSS classes</a></li>
-			<li><a href="#events">Missing translations: events</a></li>
+			<li><a href="#missing-events">Missing translations: events</a></li>
 			<li><a href="#extra">Extra ball: localstorage and dynamic loading</a></li>
 		</ul>
 		
 		<a name="basic"></a>
-		<h5>Basic use with chaining</h5>
+		<h3>Basic use with chaining</h3>
 		
 		<p>These guys at Twitter don't know a thing about styling.
 		   Let's <em>improve</em> Bootstrap's default styles a little bit.</p>
@@ -182,7 +199,7 @@
 					"translation_table": trans_table
 				} )
 				.css( {
-					"color": "red",
+					"color": "chocolate",
 					"font-size": "150%",
 					"font-family": "fantasy",
 					"font-style": "italic",
@@ -202,7 +219,7 @@
 		<!-- ########################################################################### -->
 		
 		<a name="several"></a>
-		<h5>Several languages</h5>
+		<h3>Several languages</h3>
 		
 		<p>Multi-language sites can't be easier.</p>
 		
@@ -259,9 +276,9 @@
 			
 			// when one of the drop-down links is clicked...
 			$('.lang-selector a').click( function () {
-				// ...read the language code...
+				// ...get the language code...
 				var lang_code = $(this).data('lang');
-				// ...and apply the translation
+				// ...and translate!
 				$('.trans-several').translate( {
 					"translation_table": trans_table_several[lang_code]
 				} );
@@ -283,17 +300,8 @@
 		
 		<!-- ########################################################################### -->
 		
-		<a name="translit"></a>
-		<h5>TODO: Parameter transliteration</h5>
-		
-		<p><code>data-transliterate_*</code> where <code>*</code> has to match an existing <code>data-param_*</code> attribute.</p>
-		
-		<p>Would be great if: No need for a value; mere attribute presence is enough.</p>
-		
-		<!-- ########################################################################### -->
-		
 		<a name="params"></a>
-		<h5>Parameters</h5>
+		<h3>Parameters</h3>
 		
 		<p>Just because we developers love parameters!</p>
 		
@@ -324,10 +332,89 @@
 		
 		<!-- ########################################################################### -->
 		
-		<a name="missing-css"></a>
-		<h5>Missing translations: CSS classes</h5>
+		<a name="html"></a>
+		<h3>TODO: Including HTML in parameters</h3>
 		
-		<p>When setting <code>add_fail_classes</code> option to true, <code>trans-not-found</code> and <code>trans-missing-param</code> classes are added when
+		<p>xxx take some code from the transliteration example and put it in here.</p>
+		
+		<!-- ########################################################################### -->
+		
+		<a name="translit"></a>
+		<h3>TODO: Parameter transliteration</h3>
+		
+		<p><code>data-transliterate_*</code> where <code>*</code> has to match an existing <code>data-param_*</code> attribute.</p>
+		
+		<p>Sample: <code>data-param_date="_yesterday"</code> with <code>data-transliterate_date</code> would show "hier" in French.</p>
+		
+		<div class="bs-docs-example" id="sample-translit">
+	<dl>
+		<dt><span class="trans-translit initialism" data-trans_id="_without_translit"></span>:</dt>
+		<dd><span class="trans-translit" data-trans_id="_last_updated"
+			data-param_date="12/10/2012" data-param_author="José L. Salinas"></span></dd>
+			
+		<dt><span class="trans-translit initialism" data-trans_id="_without_translit"></span>
+		    (<span class="trans-translit initialism" data-trans_id="_html"></span>):</dt>
+			<!-- WARNING!
+			     It's not visible in the code below, but the data-param_* value *must* be encoded
+			     when including HTML content. If not, the page won't load.
+			     You can use something like PHP's htmlentities() in the server side or a
+			     custom Javascript function (sadly, there's no standard function for that yet.)
+				 Using jQuery:
+				 function html_encode (value) { return $('<div/>').text(value).html(); }
+				 No jQuery or any other dependencies:
+				 function html_encode (value) { return value.replace(/</g, '&lt;')
+				                                            .replace(/>/g, '&gt;')
+															.replace(/"/g, '&quot;')
+															.replace(/'/g, '&apos;'); }
+				 This is how the data-param_author attribute looks like in the real source code:
+				 data-param_author="&amp;lt;a href=&amp;quot;http://github.com/jotaelesalinas&amp;quot;&amp;gt;José L. Salinas&amp;lt;/a&amp;gt;"
+				 -->
+		<dd><span class="trans-translit" data-trans_id="_last_updated"
+			data-param_date="12/10/2012" data-param_author="&lt;a href=&quot;http://github.com/jotaelesalinas&quot;&gt;José L. Salinas&lt;/a&gt;"></span></dd>
+			
+		<dt><span class="trans-translit initialism" data-trans_id="_with_translit"></span>:</dt>
+		<dd><span class="trans-translit" data-trans_id="_last_updated"
+			data-param_date="_n_days_ago" data-transliterate_date
+			data-param_days="9"
+			data-param_author="_link_author" data-transliterate_author
+			data-param_author_name="José L. Salinas" data-param_author_url="http://github.com/jotaelesalinas"></span></dd>
+	</dl>
+
+	<script>
+		$(document).ready( function () {
+			$('.trans-translit').translate( {
+				"translation_table": {
+					"_without_translit": "No transliteration",
+					"_with_translit":    "With transliteration",
+					"_html":             "using HTML",
+					"_created":       "Created: [_DATE_] by [_AUTHOR_].",
+					"_last_updated":  "Last updated: [_DATE_] by [_AUTHOR_].",
+					"_link_author":   "<a class=\"auhor\" href=\"[_AUTHOR_URL_]\">[_AUTHOR_NAME_]</a>",
+					"_1_minute_ago":  "one minute ago",
+					"_n_minutes_ago": "[_MINUTES_] minutes ago",
+					"_1_hour_ago":    "one hour ago",
+					"_n_hours_ago":   "[_HOURS_] hours ago",
+					"_1_day_ago":     "yesterday",
+					"_n_days_ago":    "[_DAYS_] days ago"
+				}
+			} );
+		} );
+	</script>
+		</div>
+
+		<pre class="sample prettyprint linenums" style="margin-bottom: 9px;" id="pre-sample-translit"></pre>
+		<script>
+			show_sample_code('translit');
+		</script>
+
+		<p>Would be great if: No need for a value; mere attribute presence is enough.</p>
+		
+		<!-- ########################################################################### -->
+		
+		<a name="missing-css"></a>
+		<h3>Missing translations: CSS classes</h3>
+		
+		<p>When setting <code>add_fail_classes</code> option to <code>true</code>, <code>trans-not-found</code> and <code>trans-missing-param</code> classes are added when
 		   a string is not found in the translation table o when a parameter is not found in the <code>data-param_*</code>
 		   attributes, respectively.</p>
 		
@@ -372,8 +459,8 @@
 		
 		<!-- ########################################################################### -->
 		
-		<a name="events"></a>
-		<h5>Missing translations: events</h5>
+		<a name="missing-events"></a>
+		<h3>Missing translations: events</h3>
 		
 		<p>This plugin fires three namespaced events:</p>
 		
