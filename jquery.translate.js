@@ -2,13 +2,7 @@
  * jQuery.translate
  * Translation plugin for jQuery
  * 
-<<<<<<< HEAD
  * See sample-usage.html for docs.
-=======
- * options:
- *   "translation_table" : {},
- *   "add_fail_classes"  : false
->>>>>>> origin/master
  * 
  * Copyright 2012 Jose L. Salinas
  * Released under the MIT License
