@@ -30,11 +30,15 @@
 		
 		var plugin = this;
 		
-		var html_encode = function (value) {
-			return value.replace(/</g, '&amp;lt;')
-			            .replace(/>/g, '&amp;gt;')
-			            .replace(/"/g, '&amp;quot;')
-			            .replace(/'/g, '&amp;apos;');
+		var html_encode_safe = function (value) {
+			value = '' + value;
+			// xxx find html entities for parenthesis
+			return value.replace(/</g, '&lt;')
+			            .replace(/>/g, '&gt;')
+			            .replace(/"/g, '&quot;')
+			            .replace(/'/g, '&apos;')
+			            .replace(/\(/g, '(')
+			            .replace(/\)/g, ')');
 		};
 		
 		plugin.each( function () {
@@ -90,7 +94,7 @@
 						$(this).trigger('fail_param.translate', [$($(this)[0]), strid, full_p]);
 					}
 					
-					text = text.replace(full_p, value);
+					text = text.replace(full_p, html_encode_safe(value));
 				}
 			}
 			

@@ -374,52 +374,45 @@
 		<!-- ########################################################################### -->
 		
 		<a name="html"></a>
-		<h3>Including HTML in parameters</h3>
+		<h3>Including HTML or user-provided data in parameters</h3>
 		
-		<p>Let's suppose we want to add a link to a voucher code. There's several ways to do it:</p>
+		<p>HTML content is not allowed inside parameters. The value of the <code>data-param_*</code> attributes will
+		   be automatically html-encoded.</p>
+		
+		<p>VERY IMPORTANT: In order to avoid XSS and analogous attacks, you *must* be absolutely sure not to embed unsafe characters
+		   like <code>&lt;</code>, <code>&gt;</code>, <code>&quot;</code> or <code>&apos;</code> inside parameter values;
+		   specially if the data has been provided by the user.
+		   Just use PHP's htmlentities function or it's correspondence in Python, Ruby, etc.</p>
+		
+		<p>In order to show how dangerous this can be, let's see a simple example in which we show data entered by the user in the registration form:</p>
 		
 		<div class="bs-docs-example" id="sample-params-html">
-	<dl>
-		<dt class="trans-params-html" data-trans_id="_recommended"></dt>
-		<dd class="trans-params-html" data-trans_id="_get_voucher_1" data-param_amount="$10.00" data-param_url="voucher.php"></dd>
-		<!-- By placing all your HTML into the translated strings:
-			  - you are separating content from presentation code
-			  - you don't have to worry about encoding HTML entities
-			  - your life will be easier and you'll sleep better at nights
-			 -->
-		
-		<dt class="trans-params-html" data-trans_id="_not_recommended"></dt>
-		<dd class="trans-params-html" data-trans_id="_get_voucher_2" data-param_amount="&lt;a href=&quot;voucher.php&quot;&gt;$10.00&lt;/a&gt;"></dd>
-		<!-- By placing HTML inside the data-param_* attributes:
-			  - you *must* encode the attribute value; if not, the page may not load
-			  - you'll have to modify files that should contain only strings of translated text
-			    when you want to change presentation (add/remove classes, css, etc)
-			  - you'll go to the hell of programmers and will listen to
-			    Rick Astley's "Never gonna give you up" for ever and ever
-			 
-			 If, despite these scary warnings, you still want to embed HTML content,
-			 you can use something like PHP's htmlentities() in the server side or a
-			 custom Javascript function (sadly, there's no standard function for that yet.)
-			 Using jQuery:
-			 function html_encode (value) { return $('<div/>').text(value).html(); }
-			 No jQuery or any other dependencies:
-			 function html_encode (value) { return value.replace(/</g, '&amp;lt;')
-														.replace(/>/g, '&amp;gt;')
-														.replace(/"/g, '&amp;quot;')
-														.replace(/'/g, '&amp;apos;'); }
-			 
-			 Now, this is how the data-param_amount attribute looks like in the real source code:
-			 data-param_amount="&amp;lt;a href=&amp;quot;voucher.php&amp;quot;&amp;gt;$10.00&amp;lt;/a&amp;gt;"
-			 -->
-	</dl>
+	<table>
+	<tbody>
+	<tr>
+		<td><span class="trans-params-html" data-trans_id="_field_user"></span>:</td>
+		<td><span class="trans-params-html" data-trans_id="_link_user"
+		          data-param_name="John Doe" data-param_id="23"></span></td>
+	</tr>
+	<tr>
+		<td><span class="trans-params-html" data-trans_id="_field_created"></span>:</td>
+		<td>1/1/2012</td>
+	</tr>
+	<tr>
+		<td><span class="trans-params-html" data-trans_id="_field_level"></span>:</td>
+		<td><span class="trans-params-html" data-trans_id="_level_1"></span></td>
+	</tr>
+	</tbody>
+	</table>
 	
 	<script>
 		$(document).ready( function () {
 			var transtable = {
-				"_recommended" : "Recommended:",
-				"_not_recommended" : "Not recommended:",
-				"_get_voucher_1" : "Get your <a href=\"[_URL_]\">[_AMOUNT_]</a> voucher now",
-				"_get_voucher_2" : "Get your [_AMOUNT_] voucher now",
+				"_field_user"    : "User name",
+				"_field_created" : "Registration date",
+				"_field_level"   : "Level",
+				"_link_user"     : "<a href=\"user.php?id=[_ID_]\">[_NAME_]</a>",
+				"_level_1"       : "moderator"
 			};
 			
 			$('.trans-params-html').translate( { "translation_table": transtable } );
@@ -432,9 +425,106 @@
 			show_sample_code('params-html');
 		</script>
 		
-		<p>It's up to you to use one method or the other. Freedom comes at a price.</p>
+		<p>Now, let's suppose the user has a look at the source code, sees the security hole in line #5 and decides to change his name
+		   from simply <code>John Doe</code> to the more sofisticated<br />
+		   <code>John Doe&quot; data-param_id=&quot;23&quot;&gt;&lt;/span&gt;&lt;script&gt;console.log(&apos;Pownd!&apos;);&lt;/script&gt;&lt;span n=&quot;</code> .</p>
 		
-		<p>Possible change for next version: disallow HTML inclusion by automatically html-encoding <code>data-param_*</code> values.</p>
+		<p>(Yes, people do this kind of things.)</p>
+		
+		<p>Here's the result if you don't html-encode the user input (open your Javascript console and you'll see the string "Pownd!"):</p>
+		
+		<div class="bs-docs-example" id="sample-params-html-bad">
+	<table>
+	<tbody>
+	<tr>
+		<td><span class="trans-params-html-bad" data-trans_id="_field_user"></span>:</td>
+		<td><span class="trans-params-html-bad" data-trans_id="_link_user"
+		          data-param_name="John Doe" data-param_id="23"></span><script>console.log('Pownd!');</script><span n="" data-param_id="23"></span></td>
+	</tr>
+	<tr>
+		<td><span class="trans-params-html" data-trans_id="_field_created"></span>:</td>
+		<td>1/1/2012</td>
+	</tr>
+	<tr>
+		<td><span class="trans-params-html" data-trans_id="_field_level"></span>:</td>
+		<td><span class="trans-params-html" data-trans_id="_level_1"></span></td>
+	</tr>
+	</tbody>
+	</table>
+	
+	<script>
+		$(document).ready( function () {
+			var transtable = {
+				"_field_user"    : "User name",
+				"_field_created" : "Registration date",
+				"_field_level"   : "Level",
+				"_link_user"     : "<a href=\"user.php?id=[_ID_]\">[_NAME_]</a>",
+				"_level_1"       : "moderator"
+			};
+			
+			$('.trans-params-html-bad').translate( { "translation_table": transtable } );
+		} );
+	</script>
+		</div>
+
+		<pre class="sample prettyprint linenums" style="margin-bottom: 9px;" id="pre-sample-params-html-bad"></pre>
+		<script>
+			show_sample_code('params-html-bad');
+		</script>
+		
+		<p>Go check your Javascript console (usually, Ctrl-Shift+J).</p>
+		
+		<p>Believe me when I say that, if the user is able to execute any kind of Javascript or embed another HTML element,
+		   he'll be able to collect a lot of passwords of other users (or even yourself, as
+		   <a href="http://itknowledgeexchange.techtarget.com/security-bytes/apacheorg-suffers-attack-warns-of-password-breach/"
+		   >it has alreay happened at some important organization</a>.)</p>
+		
+		<p>If you properly html-encode the user input, the specified string will turn into<br />
+		   <code>John Doe&amp;quot; data-param_id=&amp;quot;23&amp;quot;&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;script&amp;gt;console.log(&amp;apos;Pownd!&amp;apos;);&amp;lt;/script&amp;gt;&amp;lt;span n=&amp;quot;</code> ,<br />and here's the result:</p>
+		
+		<div class="bs-docs-example" id="sample-params-html-ok">
+	<table>
+	<tbody>
+	<tr>
+		<td><span class="trans-params-html-ok" data-trans_id="_field_user"></span>:</td>
+		<td><span class="trans-params-html-ok" data-trans_id="_link_user"
+		          data-param_name="John Doe&quot; data-param_id=&quot;23&quot;&gt;&lt;/span&gt;&lt;script&gt;console.log(&apos;Pownd!&apos;);&lt;/script&gt;&lt;span n=&quot;" data-param_id="23"></span></td>
+		<!-- You see the same content in this sample code, but have a look at the source code and you'll see it's escaped -->
+	</tr>
+	<tr>
+		<td><span class="trans-params-html" data-trans_id="_field_created"></span>:</td>
+		<td>1/1/2012</td>
+	</tr>
+	<tr>
+		<td><span class="trans-params-html" data-trans_id="_field_level"></span>:</td>
+		<td><span class="trans-params-html" data-trans_id="_level_1"></span></td>
+	</tr>
+	</tbody>
+	</table>
+	
+	<script>
+		$(document).ready( function () {
+			var transtable = {
+				"_field_user"    : "User name",
+				"_field_created" : "Registration date",
+				"_field_level"   : "Level",
+				"_link_user"     : "<a href=\"user.php?id=[_ID_]\">[_NAME_]</a>",
+				"_level_1"       : "moderator"
+			};
+			
+			$('.trans-params-html-ok').translate( { "translation_table": transtable } );
+		} );
+	</script>
+		</div>
+
+		<pre class="sample prettyprint linenums" style="margin-bottom: 9px;" id="pre-sample-params-html-ok"></pre>
+		<script>
+			show_sample_code('params-html-ok');
+		</script>
+		
+		<p>Of course, all this XSS thing is not specific to this jQuery plugin. It works everywhere with all kind of user-provided input.
+		   You should always attempt to <a href="http://xkcd.com/327/">sanitize all your input</a> in the first place; but sometimes it's not possible for whatever reason, and escaping
+		   such data before displaying it is crucial.</p>
 		
 		<!-- ########################################################################### -->
 		
