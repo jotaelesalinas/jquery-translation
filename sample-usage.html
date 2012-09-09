@@ -4,7 +4,7 @@
 <!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
 <head>
-	<title>jQuery translate plugin</title>
+	<title>jQuery translation plugin</title>
 	
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -39,7 +39,7 @@
 	<!-- <script src="http://twitter.github.com/bootstrap/assets/js/google-code-prettify/prettify.js"></script> -->
 	<script src="external/prettify.js"></script>
 	
-	<script src="jquery.translate.js"></script>
+	<script src="jquery.translation.js"></script>
 
 </head>
 
@@ -59,9 +59,9 @@
 	</script>
 	
 	<div class="container">
-		<h1>jQuery translate plugin</h1>
+		<h1>jQuery translation plugin</h1>
 		
-		<p>jQuery translate is a plugin for jQuery that changes strings in an HTML page with their corresponding translations.</p>
+		<p>jQuery translation is a plugin for jQuery that changes strings in an HTML page with their corresponding translations.</p>
 		
 		<ul>
 			<li><a href="#features">Features</a></li>
@@ -86,13 +86,13 @@
 		<a name="usage"></a>
 		<h3>Setup</h3>
 		
-		<p>Just add this two lines to your HTML:</p>
+		<p>Just add these two lines to your HTML:</p>
 		
 		<pre class="sample prettyprint linenums" style="margin-bottom: 9px;">
 &lt;!-- jQuery library, most probably already included in your project --&gt;
 &lt;script src="http://code.jquery.com/jquery-1.8.0.min.js"&gt;&lt;/script&gt;
-&lt;!-- jQuery translate library --&gt;
-&lt;script src="jquery.translate.js"&gt;&lt;/script&gt;</pre>
+&lt;!-- jQuery translation library --&gt;
+&lt;script src="jquery.translation.js"&gt;&lt;/script&gt;</pre>
 		
 		<p>Add your HTML as usual and wrap the text you want to translate with <code>&lt;span&gt;</code>, <code>&lt;p&gt;</code>
 		   or any other HTML element that fits your needs.</p>
@@ -107,21 +107,21 @@
         &lt;li class=&quot;btn&quot;&gt;&lt;a class=&quot;trans&quot; data-trans_id=&quot;_homepage&quot;&gt;Home&lt;/a&gt;&lt;/li&gt;
         &lt;li class=&quot;btn&quot;&gt;&lt;a class=&quot;trans&quot; data-trans_id=&quot;_contact&quot;&gt;Contact&lt;/a&gt;&lt;/li&gt;
         &lt;li class=&quot;btn&quot;&gt;&lt;a class=&quot;trans&quot; data-trans_id=&quot;_sitemap&quot;&gt;Sitemap&lt;/a&gt;&lt;/li&gt;
-        &lt;li class=&quot;btn&quot;&gt;&lt;a class=&quot;trans&quot; data-trans_id=&quot;_jobs&quot;&gt;Jobs&lt;/a&gt; &lt;span class=&quot;badge badge-info&quot;&gt;4&lt;/span&gt;&lt;/li&gt;
+        &lt;li class=&quot;btn&quot;&gt;&lt;a&gt;&lt;span class=&quot;trans&quot; data-trans_id=&quot;_jobs&quot;&gt;Jobs&lt;/span&gt; &lt;span class=&quot;badge badge-info&quot;&gt;4&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
     &lt;/ul&gt;
 &lt;/nav&gt;</pre>
 		
-		<p>And run this code at the end of your HTML file (in this case, we translate to fake Spanish):</p>
+		<p>And run this code at the end of your HTML file (in this case, we translate to <a href="http://www.urbandictionary.com/define.php?term=HOYGAN">Hoygan</a>):</p>
 		
 		<pre class="sample prettyprint linenums" style="margin-bottom: 9px;">
 &lt;script&gt;
     var trans_table = {
-        "_homepage": "Homepago",
-        "_contact":  "Contacto",
-        "_sitemap":  "Zitemapo",
-        "_jobs":     "Jobos"
+        "_homepage": "HINISIO",
+        "_contact":  "CONTACTO",
+        "_sitemap":  "MAPA DEL ZITIO",
+        "_jobs":     "HOFERTAS DE HENPLEO"
     };
-    // $(selector).translate(options);
+    // usage: $(selector).translate(options);
     $('.trans').translate( { "translation_table": trans_table });
 &lt;/script&gt;</pre>
 
@@ -133,15 +133,15 @@
         <li class="btn"><a class="trans" data-trans_id="_homepage">Home</a></li>
         <li class="btn"><a class="trans" data-trans_id="_contact">Contact</a></li>
         <li class="btn"><a class="trans" data-trans_id="_sitemap">Sitemap</a></li>
-        <li class="btn"><a class="trans" data-trans_id="_jobs">Jobs</a> <span class="badge badge-info">4</span></li>
+        <li class="btn"><a><span class="trans" data-trans_id="_jobs">Jobs</span> <span class="badge badge-info">4</span></a></li>
     </ul>
 </nav>
 <script>
     var trans_table = {
-        "_homepage": "Homepago",
-        "_contact":  "Contacto",
-        "_sitemap":  "Zitemapo",
-        "_jobs":     "Jobos"
+        "_homepage": "HINISIO",
+        "_contact":  "CONTACTO",
+        "_sitemap":  "MAPA DEL ZITIO",
+        "_jobs":     "HOFERTAS DE HENPLEO"
     };
     $('.trans').translate( { "translation_table": trans_table });
 </script>
@@ -167,10 +167,8 @@
 		<h3>To-do list</h3>
 		
 		<ul>
-			<li>parameter <strong>transliteration</strong>: search the parameter value again in the translation table.</li>
-			<li><strong>html inside the elements</strong> being translated: replace/add the translated text only until the next "<" character.<br />
-			    in the "jobs" example above, the optimal solution would be to place the badge _inside_ the link, so that it is also clickable.<br />
-				should this be an option? opt-in or opt-out?</li>
+			<li>Recursive parameters: search the parameter value again in the translation table.</li>
+			<li>Remove direct HTML inclusion in parameters: automatically html-encode parameter values</li>
 		</ul>
 		
 		<!-- ########################################################################### -->
@@ -238,17 +236,18 @@
 		
 		<div class="bs-docs-example" id="sample-several">
 	<span class="btn-group">
-		<button id="dropdown-button" class="btn"><span class="trans-several" data-trans_id="_language">English</span></button>
+		<button id="dropdown-button" class="btn"><img id="flag-several" src="" width="16" height="11" border="0" />
+			<span class="trans-several" data-trans_id="_language">English</span></button>
 		<button class="btn dropdown-toggle" data-toggle="dropdown">
 			<span class="caret"></span>
 		</button>
 		<ul class="dropdown-menu lang-selector">
 			<!-- dropdown menu links -->
-			<li><a data-lang="en">English</a></li>
-			<li><a data-lang="de">Deutsch</a></li>
-			<li><a data-lang="it">Italiano</a></li>
-			<li><a data-lang="es">Español</a></li>
-			<li><a data-lang="fr">Français</a></li>
+			<li><a data-lang="en"><img src="external/flag-lang-en.png" width="16" height="11" border="0" /> English</a></li>
+			<li><a data-lang="de"><img src="external/flag-lang-de.png" width="16" height="11" border="0" /> Deutsch</a></li>
+			<li><a data-lang="it"><img src="external/flag-lang-it.png" width="16" height="11" border="0" /> Italiano</a></li>
+			<li><a data-lang="es"><img src="external/flag-lang-es.png" width="16" height="11" border="0" /> Español</a></li>
+			<li><a data-lang="fr"><img src="external/flag-lang-fr.png" width="16" height="11" border="0" /> Français</a></li>
 	  </ul>
 	</span>
 	
@@ -262,27 +261,27 @@
 			var trans_table_several = {
 				"en": {
 					"_buy_now": "Buy now",
-					"_find_out_more": "Find out more",
+					"_find_out_more": "Find out more...",
 					"_language": "English"
 				},
 				"de": {
 					"_buy_now": "Jetzt kaufen",
-					"_find_out_more": "Erfahren Sie mehr",
+					"_find_out_more": "Erfahren Sie mehr...",
 					"_language": "Deutsch"
 				},
 				"it": {
 					"_buy_now": "Acquista",
-					"_find_out_more": "Scopri",
+					"_find_out_more": "Scopri...",
 					"_language": "Italiano"
 				},
 				"es": {
 					"_buy_now": "Comprar ahora",
-					"_find_out_more": "Más información",
+					"_find_out_more": "Más información...",
 					"_language": "Español"
 				},
 				"fr": {
 					"_buy_now": "Achetez",
-					"_find_out_more": "En savoir plus",
+					"_find_out_more": "En savoir plus ...",
 					"_language":  "Français"
 				}
 			};
@@ -295,6 +294,7 @@
 				$('.trans-several').translate( {
 					"translation_table": trans_table_several[lang_code]
 				} );
+				$('#flag-several').attr('src', $(this).find('img').attr('src'));
 			} );
 			
 			// for this demo, we pre-select a language other than english,
@@ -318,21 +318,49 @@
 		
 		<p>Just because we developers love parameters!</p>
 		
-		<p>XXX explain parameter format in html and in translated text</p>
+		<p>Translated strings can be easily parameterized by using the following rules:</p>
+		
+		<ul>
+			<li>In the translated string, enclose the name of the parameter between <code>[_</code> and <code>_]</code>.</li>
+			<li>In the translated HTML element, add an attribute called <code>data-param_</code> and the name of the parameter like the one in the translated string, in lowercase.</li>
+		</ul>
+		
+		The plugin will do the rest:
 		
 		<div class="bs-docs-example" id="sample-params">
 	<p>
-		<span class="trans-params btn btn-primary" data-trans_id="_get_voucher" data-param_amount="$10.00"></span>
+		<span class="trans-params btn btn-primary" id="trans-param-voucher" data-trans_id="_get_voucher" data-param_amount="$10.00"></span>
 		<span class="trans-params" data-trans_id="_remaining_vouchers" data-param_num="7" data-param_end_date="10/21/2012"></span>
+	</p>
+
+	<p>
+		<span class="trans-params" data-trans_id="_change_voucher_value"></span>
+		<br />
+		<span class="input-prepend input-append">
+			<span class="add-on">$</span>
+			<input class="input-small" id="trans-params-new-value" size="4" type="number" value="10" step="1" min="1" max="20">
+			<button class="trans-params btn" data-trans_id="_go" id="trans-param-button">Go</button>
+		</span>
 	</p>
 
 	<script>
 		$(document).ready( function () {
-			$('.trans-params').translate( {
-				"translation_table": {
-					"_get_voucher": "Get your [_AMOUNT_] voucher now",
-					"_remaining_vouchers": "There's only [_NUM_] left until [_END_DATE_]!"
-				}
+			var translate = function (selector, transtable, other_options) {
+				$(selector).translate( $.extend({}, { "translation_table": transtable }, other_options) );
+			}
+			
+			var transtable = {
+				"_get_voucher"          : "Get your [_AMOUNT_] voucher now",
+				"_remaining_vouchers"   : "There's only [_NUM_] left until [_END_DATE_]!",
+				"_change_voucher_value" : "Change value of voucher code:",
+				"_go"                   : "Go"
+			};
+			
+			translate('.trans-params', transtable);
+			
+			$('#trans-param-button').click( function () {
+				$('#trans-param-voucher').data('param_amount', '$' + ($('#trans-params-new-value').val() / 1) + '.00');
+				translate('.trans-params', transtable);
 			} );
 		} );
 	</script>
@@ -346,9 +374,67 @@
 		<!-- ########################################################################### -->
 		
 		<a name="html"></a>
-		<h3>TODO: Including HTML in parameters</h3>
+		<h3>Including HTML in parameters</h3>
 		
-		<p>xxx take some code from the transliteration example and put it in here.</p>
+		<p>Let's suppose we want to add a link to a voucher code. There's several ways to do it:</p>
+		
+		<div class="bs-docs-example" id="sample-params-html">
+	<dl>
+		<dt class="trans-params-html" data-trans_id="_recommended"></dt>
+		<dd class="trans-params-html" data-trans_id="_get_voucher_1" data-param_amount="$10.00" data-param_url="voucher.php"></dd>
+		<!-- By placing all your HTML into the translated strings:
+			  - you are separating content from presentation code
+			  - you don't have to worry about encoding HTML entities
+			  - your life will be easier and you'll sleep better at nights
+			 -->
+		
+		<dt class="trans-params-html" data-trans_id="_not_recommended"></dt>
+		<dd class="trans-params-html" data-trans_id="_get_voucher_2" data-param_amount="&lt;a href=&quot;voucher.php&quot;&gt;$10.00&lt;/a&gt;"></dd>
+		<!-- By placing HTML inside the data-param_* attributes:
+			  - you *must* encode the attribute value; if not, the page may not load
+			  - you'll have to modify files that should contain only strings of translated text
+			    when you want to change presentation (add/remove classes, css, etc)
+			  - you'll go to the hell of programmers and will listen to
+			    Rick Astley's "Never gonna give you up" for ever and ever
+			 
+			 If, despite these scary warnings, you still want to embed HTML content,
+			 you can use something like PHP's htmlentities() in the server side or a
+			 custom Javascript function (sadly, there's no standard function for that yet.)
+			 Using jQuery:
+			 function html_encode (value) { return $('<div/>').text(value).html(); }
+			 No jQuery or any other dependencies:
+			 function html_encode (value) { return value.replace(/</g, '&amp;lt;')
+														.replace(/>/g, '&amp;gt;')
+														.replace(/"/g, '&amp;quot;')
+														.replace(/'/g, '&amp;apos;'); }
+			 
+			 Now, this is how the data-param_amount attribute looks like in the real source code:
+			 data-param_amount="&amp;lt;a href=&amp;quot;voucher.php&amp;quot;&amp;gt;$10.00&amp;lt;/a&amp;gt;"
+			 -->
+	</dl>
+	
+	<script>
+		$(document).ready( function () {
+			var transtable = {
+				"_recommended" : "Recommended:",
+				"_not_recommended" : "Not recommended:",
+				"_get_voucher_1" : "Get your <a href=\"[_URL_]\">[_AMOUNT_]</a> voucher now",
+				"_get_voucher_2" : "Get your [_AMOUNT_] voucher now",
+			};
+			
+			$('.trans-params-html').translate( { "translation_table": transtable } );
+		} );
+	</script>
+		</div>
+
+		<pre class="sample prettyprint linenums" style="margin-bottom: 9px;" id="pre-sample-params-html"></pre>
+		<script>
+			show_sample_code('params-html');
+		</script>
+		
+		<p>It's up to you to use one method or the other. Freedom comes at a price.</p>
+		
+		<p>Possible change for next version: disallow HTML inclusion by automatically html-encoding <code>data-param_*</code> values.</p>
 		
 		<!-- ########################################################################### -->
 		
@@ -357,16 +443,18 @@
 		
 		<p><code>data-transliterate_*</code> where <code>*</code> has to match an existing <code>data-param_*</code> attribute.</p>
 		
+		<p>xxx add <code>autotranslit</code> option or class? make it default? check if param value exists in translation_table keys, if yes, transliterate, if not, output param value.</p>
+		
 		<p>Sample: <code>data-param_date="_yesterday"</code> with <code>data-transliterate_date</code> would show "hier" in French.</p>
 		
 		<div class="bs-docs-example" id="sample-translit">
 	<dl>
-		<dt><span class="trans-translit initialism" data-trans_id="_without_translit"></span>:</dt>
+		<dt><span class="trans-translit" data-trans_id="_without_translit"></span>:</dt>
 		<dd><span class="trans-translit" data-trans_id="_last_updated"
 			data-param_date="12/10/2012" data-param_author="José L. Salinas"></span></dd>
 			
-		<dt><span class="trans-translit initialism" data-trans_id="_without_translit"></span>
-		    (<span class="trans-translit initialism" data-trans_id="_html"></span>):</dt>
+		<dt><span class="trans-translit" data-trans_id="_without_translit"></span>
+		    (<span class="trans-translit" data-trans_id="_html"></span>):</dt>
 			<!-- WARNING!
 			     It's not visible in the code below, but the data-param_* value *must* be encoded
 			     when including HTML content. If not, the page won't load.
@@ -375,17 +463,17 @@
 				 Using jQuery:
 				 function html_encode (value) { return $('<div/>').text(value).html(); }
 				 No jQuery or any other dependencies:
-				 function html_encode (value) { return value.replace(/</g, '&lt;')
-				                                            .replace(/>/g, '&gt;')
-															.replace(/"/g, '&quot;')
-															.replace(/'/g, '&apos;'); }
+				 function html_encode (value) { return value.replace(/</g, '&amp;lt;')
+				                                            .replace(/>/g, '&amp;gt;')
+															.replace(/"/g, '&amp;quot;')
+															.replace(/'/g, '&amp;apos;'); }
 				 This is how the data-param_author attribute looks like in the real source code:
 				 data-param_author="&amp;lt;a href=&amp;quot;http://github.com/jotaelesalinas&amp;quot;&amp;gt;José L. Salinas&amp;lt;/a&amp;gt;"
 				 -->
 		<dd><span class="trans-translit" data-trans_id="_last_updated"
 			data-param_date="12/10/2012" data-param_author="&lt;a href=&quot;http://github.com/jotaelesalinas&quot;&gt;José L. Salinas&lt;/a&gt;"></span></dd>
 			
-		<dt><span class="trans-translit initialism" data-trans_id="_with_translit"></span>:</dt>
+		<dt><span class="trans-translit" data-trans_id="_with_translit"></span>:</dt>
 		<dd><span class="trans-translit" data-trans_id="_last_updated"
 			data-param_date="_n_days_ago" data-transliterate_date
 			data-param_days="9"

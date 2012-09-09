@@ -30,6 +30,13 @@
 		
 		var plugin = this;
 		
+		var html_encode = function (value) {
+			return value.replace(/</g, '&amp;lt;')
+			            .replace(/>/g, '&amp;gt;')
+			            .replace(/"/g, '&amp;quot;')
+			            .replace(/'/g, '&amp;apos;');
+		};
+		
 		plugin.each( function () {
 			var strid = $(this).data(DATA_STR_ID).trim();
 			if ( strid !== '' ) {
@@ -70,6 +77,11 @@
 					
 					var key = DATA_PARAM_PREFIX + p.toLowerCase();
 					var value = $(this).data(key);
+					
+					// xxx
+					if ( 1 ) {
+					}
+					
 					if ( (typeof value === 'undefined') || (value === null) ) {
 						value = full_p;
 						if (settings.add_fail_classes) {
