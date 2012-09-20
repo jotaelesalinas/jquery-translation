@@ -86,6 +86,8 @@
 		<a name="usage"></a>
 		<h3>Setup</h3>
 		
+		<h4>Step 1: Add libraries</h4>
+
 		<p>Just add these two lines to your HTML:</p>
 		
 		<pre class="sample prettyprint linenums" style="margin-bottom: 9px;">
@@ -94,7 +96,9 @@
 &lt;!-- jQuery translation library --&gt;
 &lt;script src="jquery.translation.js"&gt;&lt;/script&gt;</pre>
 		
-		<p>Add your HTML as usual and wrap the text you want to translate with <code>&lt;span&gt;</code>, <code>&lt;p&gt;</code>
+		<h4>Step 2: Modify existing HTML markup</h4>
+
+		<p>Add your HTML markup as usual and wrap the text you want to translate with <code>&lt;span&gt;</code>, <code>&lt;p&gt;</code>
 		   or any other HTML element that fits your needs.</p>
 		
 		<p>Add <code>data-trans_id</code> attribute with the identifier of the string you want to translate and, optionally,
@@ -102,39 +106,47 @@
 		   for an example on how to use the parameters.</p>
 		
 		<pre class="sample prettyprint linenums" style="margin-bottom: 9px;">
-&lt;nav&gt;
-    &lt;ul class=&quot;btn-group&quot;&gt;
-        &lt;li class=&quot;btn&quot;&gt;&lt;a class=&quot;trans&quot; data-trans_id=&quot;_homepage&quot;&gt;Home&lt;/a&gt;&lt;/li&gt;
-        &lt;li class=&quot;btn&quot;&gt;&lt;a class=&quot;trans&quot; data-trans_id=&quot;_contact&quot;&gt;Contact&lt;/a&gt;&lt;/li&gt;
-        &lt;li class=&quot;btn&quot;&gt;&lt;a class=&quot;trans&quot; data-trans_id=&quot;_sitemap&quot;&gt;Sitemap&lt;/a&gt;&lt;/li&gt;
-        &lt;li class=&quot;btn&quot;&gt;&lt;a&gt;&lt;span class=&quot;trans&quot; data-trans_id=&quot;_jobs&quot;&gt;Jobs&lt;/span&gt; &lt;span class=&quot;badge badge-info&quot;&gt;4&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-&lt;/nav&gt;</pre>
+&lt;div class=&quot;btn-group&quot;&gt;
+    &lt;a class=&quot;trans btn&quot; data-trans_id=&quot;_homepage&quot;&gt;Home&lt;/a&gt;
+    &lt;a class=&quot;trans btn&quot; data-trans_id=&quot;_contact&quot;&gt;Contact&lt;/a&gt;
+    &lt;a class=&quot;trans btn&quot; data-trans_id=&quot;_sitemap&quot;&gt;Sitemap&lt;/a&gt;
+    &lt;a class=&quot;btn&quot;&gt;&lt;span class=&quot;trans&quot; data-trans_id=&quot;_jobs&quot;&gt;Jobs&lt;/span&gt; &lt;span class=&quot;badge badge-info&quot;&gt;4&lt;/span&gt;&lt;/a&gt;
+&lt;/div&gt;</pre>
 		
-		<p>And run this code at the end of your HTML file (in this case, we translate to <a href="http://www.urbandictionary.com/define.php?term=HOYGAN">Hoygan</a>):</p>
+		<h4>Step 3: Add your translation strings</h4>
+
+		<p>Create an object with key-value pairs containing the strings you want to translate:</p>
 		
 		<pre class="sample prettyprint linenums" style="margin-bottom: 9px;">
 &lt;script&gt;
     var trans_table = {
-        "_homepage": "HINISIO",
-        "_contact":  "CONTACTO",
-        "_sitemap":  "MAPA DEL ZITIO",
-        "_jobs":     "HOFERTAS DE HENPLEO"
+        "_homepage": "Página de inicio",
+        "_contact":  "Contacto",
+        "_sitemap":  "Mapa del sitio",
+        "_jobs":     "Vacantes"
     };
+&lt;/script&gt;</pre>
+
+		<h4>Step 4: Run the plugin on the desired elements</h4>
+
+		<p>And run this code at the end of your HTML file (in this case, we translate to Spanish):</p>
+		
+		<pre class="sample prettyprint linenums" style="margin-bottom: 9px;">
+&lt;script&gt;
     // usage: $(selector).translate(options);
     $('.trans').translate( { "translation_table": trans_table });
 &lt;/script&gt;</pre>
 
-		<p>Our code in action:</p>
+		<h4>Our code in action:</h4>
 		
 		<div class="bs-docs-example">
 <nav>
-    <ul class="btn-group">
-        <li class="btn"><a class="trans" data-trans_id="_homepage">Home</a></li>
-        <li class="btn"><a class="trans" data-trans_id="_contact">Contact</a></li>
-        <li class="btn"><a class="trans" data-trans_id="_sitemap">Sitemap</a></li>
-        <li class="btn"><a><span class="trans" data-trans_id="_jobs">Jobs</span> <span class="badge badge-info">4</span></a></li>
-    </ul>
+    <div class="btn-group">
+        <a class="trans btn" data-trans_id="_homepage">Home</a>
+        <a class="trans btn" data-trans_id="_contact">Contact</a>
+        <a class="trans btn" data-trans_id="_sitemap">Sitemap</a>
+        <a class="btn"><span class="trans" data-trans_id="_jobs">Jobs</span> <span class="badge badge-info">4</span></a>
+    </div>
 </nav>
 <script>
     var trans_table = {
@@ -652,14 +664,15 @@
 			    <br />
 				Extra arguments of handler function:
 				<ul style="margin-bottom: .75em;">
-					<li><code>element</code>: the element that caused the event to trigger
-					<li><code>lang</code>: the language used
-					<li><code>strid</code>: the string identificator
+					<li><code>selector</code>: selector used to call the plugin
+					<li><code>strid</code>: the string identifier
 				</ul>
 			<li><code>fail_param.translate</code> fires every time a paramenter is not found in the <code>data-param_*</code> attributes.
 			    <br />
-				Extra arguments of handler function are the same than <code>fail_strid.translate</code> plus:
+				Extra arguments of handler function are:
 				<ul style="margin-bottom: .75em;">
+					<li><code>selector</code>: selector used to call the plugin
+					<li><code>strid</code>: the string identifier
 					<li><code>param</code>: the parameter that was not found (full string as present in the translated string)
 				</ul>
 		</ul>
@@ -727,9 +740,150 @@
 		
 		<ul>
 			<li>In multi-language sites, get the translations with AJAX calls</li>
-			<li>Save the translations to local storage and, with the help of the events, request only the missing ones</li>
+			<li>Cache the translations in local storage and, with the help of the events, request only the missing ones</li>
 		</ul>
 		
+		<h4>Asynchronous load of translation strings</h4>
+
+		<p>Warning: this code hasn't been tested.</p>
+		
+		<pre class="sample prettyprint linenums" style="margin-bottom: 9px;">
+&lt;!-- Load this script externally via &lt;script src=""&gt;&lt;/script&gt; call --&gt;
+&lt;script&gt;
+    const ajax_url = '/ajax/my_translated_strings.php?lang=[_LANG_]';
+    var langs = {};
+    
+    function change_language (lang) {
+        if ( typeof langs[lang] === 'undefined' ) {
+            // if this language hasn't been downloaded yet, fetch it using an AJAX call
+            // XXX urlencode in javascript?
+            var url = ajax_url.replace('[_LANG_]', urlencode(lang));
+            $.getJSON(url, function (data) {
+                // do some checks
+                langs[lang] = data;
+                translate('.trans', langs[lang]);
+            } );
+        } else {
+            // if this language has already been downloaded, just use it
+            translate('.trans', langs[lang]);
+        }
+    }
+    
+    function translate (selector, translation_strings) {
+        $(selector).translate( { "translation_table": translation_strings });
+    }
+&lt;/script&gt;
+
+&lt;!-- Somewhere in the HTML page, add a drop-down menu for language selection,
+     call change_language(lang) when value changed --&gt;
+
+&lt;!-- Add this script at the end of the HTML page --&gt;
+&lt;script&gt;
+    // some server-side code can be used here in order to detect
+    // browser language preferences and set default_language accordingly
+    var default_language = 'en';
+    change_language(default_language);
+&lt;/script&gt;</pre>
+		
+		<h4>Use local storage, fetch only missing translations</h4>
+
+		<p>Warning: this code hasn't been tested either.</p>
+		
+		<p>New external script:</p>
+
+		<pre class="sample prettyprint linenums" style="margin-bottom: 9px;">
+const ajax_url_all = '/ajax/my_translated_strings.php?lang=[_LANG_]';
+const ajax_url_specific = '/ajax/my_translated_strings.php?lang=[_LANG_]&trans_ids=[_TRANS_IDS_]';
+
+// some better detection library like Modernizr is recommended
+var exists_localstorage = typeof window.localstorage !== 'undefined';
+
+if (! exists_localstorage) {
+    var langs = {};
+}
+
+function get_lang (lang) {
+    return exists_localstorage ?
+               (typeof window.localstorage['translate_' + lang] !== 'undefined' ?
+                   // xxx polyfill for JSON.decode?
+                   JSON.decode(window.localstorage['translate_' + lang]) :
+                   false) :
+               (typeof langs[lang] !== 'undefined' ?
+                   langs[lang] :
+                   false);
+}
+
+function set_lang (lang, translation_strings) {
+    if (exists_localstorage) {
+        // xxx polyfill for JSON.stringify?
+        window.localstorage['translate_' + lang] = JSON.stringify(translation_strings);
+    else {
+        langs[lang] = translation_strings;
+    }
+}
+
+function change_language (lang) {
+    var trans_strings = get_lang(lang);
+    if ( trans_strings !== false ) {
+        // if this language has already been downloaded, just use it
+        translate('.trans', trans_strings);
+        return;
+    }
+    
+    // if this language hasn't been downloaded yet, fetch it using an AJAX call
+    fetch_translation(lang);
+}
+
+/* xxx default argument values do not exist in javascript */
+function fetch_translation (lang, trans_ids = null) {
+    /* xxx static does not exist in javascipt */
+    static last_lang = null;
+    if (lang !== null) {
+        last_lang = lang;
+    } else {
+        lang = last_lang;
+    }
+    
+    if (trans_ids) {
+        // XXX urlencode in javascript?
+        var url = ajax_url_specific.replace('[_LANG_]', urlencode(lang));
+        // optionally, trim and filter empty values here
+        url = url.replace('[_TRANS_IDS_]', trans_ids.join(','));
+    } else {
+        // XXX urlencode in javascript?
+        var url = ajax_url_all.replace('[_LANG_]', urlencode(lang));
+    }
+    
+    $.getJSON(url, function (data) {
+        // do some checks
+        data = $.extend(get_lang(lang), data);
+        set_lang(lang, data);
+        translate('.trans', get_lang(lang));
+    } );
+}
+
+function translate (selector, translation_strings) {
+    // xxx check for infine loop if a translation string is always missing
+    // take missing_ids out of the function and make sure that it's empty
+    
+    var missing_ids = [];
+    
+    $(selector)
+        .bind('fail_strid.translate', function (e, selector, strid) {
+            missing_ids.push(strid);
+            console.log( [ 'fail_strid.translate', e, selector, strid ] );
+        } )
+        .bind('fail_param.translate', function (e, selector, strid, param) {
+            $(this).addClass('trans-missing-param');
+            console.log( [ 'fail_param.translate', e, selector, strid, param ] );
+        } )
+        .bind('finished.translate', function (e, selector) {
+            fetch_translation(null, missing_ids);
+        } )
+        .translate( { "translation_table": translation_strings } );
+}
+</pre>
+
 		<!-- ########################################################################### -->
 		
 		<a name="about"></a>
