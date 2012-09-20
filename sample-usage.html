@@ -167,8 +167,7 @@
 		<h3>To-do list</h3>
 		
 		<ul>
-			<li>Recursive parameters: search the parameter value again in the translation table.</li>
-			<li>Remove direct HTML inclusion in parameters: automatically html-encode parameter values</li>
+			<li>Change <code>translation-table</code> option to simply <code>trans</code>?</li>
 		</ul>
 		
 		<!-- ########################################################################### -->
@@ -180,10 +179,11 @@
 			<li><a href="#several">Several languages</a></li>
 			<li><a href="#params">Parameters</a></li>
 			<li><a href="#html">Including HTML in parameters</a></li>
-			<li><a href="#translit">TODO: Parameter transliteration</a></li>
+			<li><a href="#translit">Recursive parameters</a></li>
 			<li><a href="#missing-css">Missing translations: CSS classes</a></li>
 			<li><a href="#missing-events">Missing translations: events</a></li>
-			<li><a href="#extra">Extra ball: localstorage and dynamic loading</a></li>
+			<li><a href="#advanced">Advanced stuff</a></li>
+			<li><a href="#about">About, credits, thanks, etc, etc</a></li>
 		</ul>
 		
 		<a name="basic"></a>
@@ -323,6 +323,7 @@
 		<ul>
 			<li>In the translated string, enclose the name of the parameter between <code>[_</code> and <code>_]</code>.</li>
 			<li>In the translated HTML element, add an attribute called <code>data-param_</code> and the name of the parameter like the one in the translated string, in lowercase.</li>
+			<li>Only letters, numbers and underscores are valid characters in parameter names.</li>
 		</ul>
 		
 		The plugin will do the rest:
@@ -377,14 +378,16 @@
 		<h3>Including HTML or user-provided data in parameters</h3>
 		
 		<p>HTML content is not allowed inside parameters. The value of the <code>data-param_*</code> attributes will
-		   be automatically html-encoded.</p>
+		   be automatically html-encoded. Well, to be honest, only this characters will be encoded:
+		   <code>&lt;</code>, <code>&gt;</code>, <code>&quot;</code> and <code>&apos;</code>. Other symbols or language-specific
+		   letters will be displayed unmodified.</p>
 		
 		<p>VERY IMPORTANT: In order to avoid XSS and analogous attacks, you *must* be absolutely sure not to embed unsafe characters
 		   like <code>&lt;</code>, <code>&gt;</code>, <code>&quot;</code> or <code>&apos;</code> inside parameter values;
-		   specially if the data has been provided by the user.
-		   Just use PHP's htmlentities function or it's correspondence in Python, Ruby, etc.</p>
+		   specially if the data has been provided by the end user.
+		   Just use PHP's htmlentities() function or it's correspondence in Python, Ruby, etc.</p>
 		
-		<p>In order to show how dangerous this can be, let's see a simple example in which we show data entered by the user in the registration form:</p>
+		<p>In order to show how dangerous this can be, let's see a simple example in which we show data entered by the user in the registration form. First, the base case:</p>
 		
 		<div class="bs-docs-example" id="sample-params-html">
 	<table>
@@ -474,8 +477,8 @@
 		
 		<p>Go check your Javascript console (usually, Ctrl-Shift+J).</p>
 		
-		<p>Believe me when I say that, if the user is able to execute any kind of Javascript or embed another HTML element,
-		   he'll be able to collect a lot of passwords of other users (or even yourself, as
+		<p>Believe me when I say this: if the user is able to execute any kind of Javascript or embed another HTML element,
+		   he'll be able to collect a lot of passwords from other users (or even yourself, as
 		   <a href="http://itknowledgeexchange.techtarget.com/security-bytes/apacheorg-suffers-attack-warns-of-password-breach/"
 		   >it has alreay happened at some important organization</a>.)</p>
 		
@@ -529,9 +532,7 @@
 		<!-- ########################################################################### -->
 		
 		<a name="translit"></a>
-		<h3>TODO: Parameter transliteration</h3>
-		
-		<p><code>data-transliterate_*</code> where <code>*</code> has to match an existing <code>data-param_*</code> attribute.</p>
+		<h3>Parameter transliteration</h3>
 		
 		<p>xxx add <code>autotranslit</code> option or class? make it default? check if param value exists in translation_table keys, if yes, transliterate, if not, output param value.</p>
 		
@@ -540,35 +541,20 @@
 		<div class="bs-docs-example" id="sample-translit">
 	<dl>
 		<dt><span class="trans-translit" data-trans_id="_without_translit"></span>:</dt>
-		<dd><span class="trans-translit" data-trans_id="_last_updated"
-			data-param_date="12/10/2012" data-param_author="José L. Salinas"></span></dd>
-			
-		<dt><span class="trans-translit" data-trans_id="_without_translit"></span>
-		    (<span class="trans-translit" data-trans_id="_html"></span>):</dt>
-			<!-- WARNING!
-			     It's not visible in the code below, but the data-param_* value *must* be encoded
-			     when including HTML content. If not, the page won't load.
-			     You can use something like PHP's htmlentities() in the server side or a
-			     custom Javascript function (sadly, there's no standard function for that yet.)
-				 Using jQuery:
-				 function html_encode (value) { return $('<div/>').text(value).html(); }
-				 No jQuery or any other dependencies:
-				 function html_encode (value) { return value.replace(/</g, '&amp;lt;')
-				                                            .replace(/>/g, '&amp;gt;')
-															.replace(/"/g, '&amp;quot;')
-															.replace(/'/g, '&amp;apos;'); }
-				 This is how the data-param_author attribute looks like in the real source code:
-				 data-param_author="&amp;lt;a href=&amp;quot;http://github.com/jotaelesalinas&amp;quot;&amp;gt;José L. Salinas&amp;lt;/a&amp;gt;"
-				 -->
-		<dd><span class="trans-translit" data-trans_id="_last_updated"
-			data-param_date="12/10/2012" data-param_author="&lt;a href=&quot;http://github.com/jotaelesalinas&quot;&gt;José L. Salinas&lt;/a&gt;"></span></dd>
+		<dd><span class="trans-translit" data-trans_id="_created"
+			data-param_date="12/02/2012" data-param_author="José L. Salinas"></span>
+			<br />
+			<span class="trans-translit" data-trans_id="_last_updated"
+			data-param_date="12/10/2012" data-param_author="Anonymous"></span></dd>
 			
 		<dt><span class="trans-translit" data-trans_id="_with_translit"></span>:</dt>
-		<dd><span class="trans-translit" data-trans_id="_last_updated"
-			data-param_date="_n_days_ago" data-transliterate_date
-			data-param_days="9"
-			data-param_author="_link_author" data-transliterate_author
-			data-param_author_name="José L. Salinas" data-param_author_url="http://github.com/jotaelesalinas"></span></dd>
+		<dd><span class="trans-translit" data-trans_id="_created"
+			data-param_date="_n_days_ago" data-param_days="9"
+			data-param_author="_link_author" data-param_author_name="José L. Salinas" data-param_author_url="http://github.com/jotaelesalinas"></span>
+			<br />
+			<span class="trans-translit" data-trans_id="_last_updated"
+			data-param_date="_1_day_ago"
+			data-param_author="Anonymous"></span></dd>
 	</dl>
 
 	<script>
@@ -577,7 +563,6 @@
 				"translation_table": {
 					"_without_translit": "No transliteration",
 					"_with_translit":    "With transliteration",
-					"_html":             "using HTML",
 					"_created":       "Created: [_DATE_] by [_AUTHOR_].",
 					"_last_updated":  "Last updated: [_DATE_] by [_AUTHOR_].",
 					"_link_author":   "<a class=\"auhor\" href=\"[_AUTHOR_URL_]\">[_AUTHOR_NAME_]</a>",
@@ -598,7 +583,7 @@
 			show_sample_code('translit');
 		</script>
 
-		<p>Would be great if: No need for a value; mere attribute presence is enough.</p>
+		<p>As you can see, the ogic in the server is a little bit more complicated when usin transliteration, but the benefits are worth the effort.</p>
 		
 		<!-- ########################################################################### -->
 		
@@ -626,7 +611,8 @@
 	</style>
 	
 	<p class="p-sample-missing-css">
-		<span class="trans-missing-css" data-trans_id="_get_voucher" data-param_amount="$10.00"></span>
+		<!-- Note the typo in "voucher"! -->
+		<span class="trans-missing-css" data-trans_id="_get_voucer" data-param_amount="$10.00"></span>
 		<span class="trans-missing-css" data-trans_id="_remaining_vouchers" data-param_num="7"></span>
 	</p>
 
@@ -634,7 +620,7 @@
 		$(document).ready( function () {
 			$('.trans-missing-css').translate( {
 				"translation_table": {
-					"_get_voucer": "Get your [_AMOUNT_] voucher now", // note the typo in "voucher"!
+					"_get_voucher": "Get your [_AMOUNT_] voucher now",
 					"_remaining_vouchers": "There's only [_NUM_] left until [_END_DATE_]!"
 				},
 				"add_fail_classes": true
@@ -704,13 +690,13 @@
 	<script>
 		$(document).ready( function () {
 			$('.trans-missing-events')
-				.bind('fail_param.translate', function (e, element, lang, strid, param) {
-					$(this).addClass('trans-missing-param');
-					console.log( [ 'fail_param.translate', e, element, lang, strid, param ] );
-				} )
-				.bind('fail_strid.translate', function (e, element, lang, strid) {
+				.bind('fail_strid.translate', function (e, selector, strid) {
 					$(this).addClass('trans-not-found');
-					console.log( [ 'fail_strid.translate', e, element, lang, strid ] );
+					console.log( [ 'fail_strid.translate', e, selector, strid ] );
+				} )
+				.bind('fail_param.translate', function (e, selector, strid, param) {
+					$(this).addClass('trans-missing-param');
+					console.log( [ 'fail_param.translate', e, selector, strid, param ] );
 				} )
 				.bind('finished.translate', function (e, selector) {
 					console.log( ['finished.translate', e, selector] );
@@ -729,12 +715,38 @@
 		<script>
 			show_sample_code('missing-events');
 		</script>
-
+		
+		<p>Note: you can get the HTML element that caused the event in the variable <code>e.target</code>.</p>
+		
+		<!-- ########################################################################### -->
+		
+		<a name="advanced"></a>
+		<h3>Advanced stuff</h3>
+		
+		<p>More elaborated things you can do with this plugin:</p>
+		
+		<ul>
+			<li>In multi-language sites, get the translations with AJAX calls</li>
+			<li>Save the translations to local storage and, with the help of the events, request only the missing ones</li>
+		</ul>
+		
+		<!-- ########################################################################### -->
+		
+		<a name="about"></a>
+		<h3>About, credits, thanks and that kind of things</h3>
+		
+		<ul>
+			<li>bootstrap</li>
+			<li>google prettifier</li>
+		</ul>
+		
+		
 		<!-- ########################################################################### -->
 		
 	<script>
 		prettyPrint();
 	</script>
+	
 </body>
 	
 </html>
